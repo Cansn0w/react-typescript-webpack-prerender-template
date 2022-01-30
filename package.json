@@ -1,0 +1,63 @@
+{
+  "name": "react-typescript-webpack-prerender-template",
+  "version": "1.0.0",
+  "description": "A minimal React project template built by webpack with typescript and css modules support, also includes a prerender facility.",
+  "scripts": {
+    "test": "jest",
+    "clean": "rm -rf dist/*",
+    "start": "node webpack.js serve",
+    "build": "node webpack.js build && npm run prerender --",
+    "build:dev": "node webpack.js build --mode=development && npm run prerender -- --api mock",
+    "prerender": "node dist/prerender",
+    "build:prerender": "node webpack.js build -e prerender",
+    "build:prerender:dev": "node webpack.js build -e prerender -m development",
+    "build:web": "node webpack.js build -e app",
+    "build:web:dev": "node webpack.js build -e app -m development",
+    "format": "prettier --write ."
+  },
+  "author": "Cansn0w",
+  "license": "ISC",
+  "keywords": [
+    "react",
+    "typescript",
+    "webpack",
+    "css-modules",
+    "prerender",
+    "pre-render",
+    "prerendering",
+    "minimal",
+    "jest"
+  ],
+  "repository": "https://github.com/Cansn0w/react-typescript-webpack-prerender-template",
+  "devDependencies": {
+    "@types/react": "^17.0.38",
+    "@types/react-dom": "^17.0.11",
+    "clean-webpack-plugin": "^4.0.0",
+    "css-loader": "^6.5.1",
+    "css-minimizer-webpack-plugin": "^3.4.1",
+    "file-loader": "^6.2.0",
+    "html-webpack-plugin": "^5.5.0",
+    "jest": "^27.4.7",
+    "mini-css-extract-plugin": "^2.5.3",
+    "postcss": "^8.4.5",
+    "postcss-loader": "^6.2.1",
+    "postcss-normalize": "^10.0.1",
+    "postcss-preset-env": "^7.2.3",
+    "prettier": "^2.5.1",
+    "serve-static": "^1.14.2",
+    "style-loader": "^3.3.1",
+    "ts-jest": "^27.1.3",
+    "ts-loader": "^9.2.6",
+    "typescript": "^4.5.5",
+    "url-loader": "^4.1.1",
+    "webpack": "^5.67.0",
+    "webpack-bundle-analyzer": "^4.5.0",
+    "webpack-dev-server": "^4.7.3",
+    "webpack-merge": "^5.8.0",
+    "yargs": "^17.3.1"
+  },
+  "dependencies": {
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2"
+  }
+}

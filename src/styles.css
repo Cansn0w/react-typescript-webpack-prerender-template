@@ -1,0 +1,21 @@
+html,
+body {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  outline: 0;
+}
+
+html {
+  color: rgba(0, 0, 0, 0.8);
+  font-size: calc(0.5vw + 12.2px);
+  font-family: OpenSans, Roboto, Helvetica Neue Light, Helvetica Neue, Helvetica,
+    Arial, Lucida Grande, sans-serif;
+  overflow-y: scroll;
+}
+
+@media screen and (max-width: 760px) {
+  html {
+    font-size: 16px;
+  }
+}
