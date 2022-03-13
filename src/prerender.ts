@@ -14,6 +14,8 @@ import { hideBin } from "yargs/helpers";
 
 async function parseArgs() {
   const args = await yargs(hideBin(process.argv))
+    .scriptName("prerender")
+    .usage('$0', 'prerender the webapp into static files')
     .option("api-dir", {
       alias: "api",
       demandOption: true,
