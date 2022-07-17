@@ -15,7 +15,7 @@ import { hideBin } from "yargs/helpers";
 async function parseArgs() {
   const args = await yargs(hideBin(process.argv))
     .scriptName("prerender")
-    .usage('$0', 'prerender the webapp into static files')
+    .usage("$0", "prerender the webapp into static files")
     .option("api-dir", {
       alias: "api",
       demandOption: true,
@@ -98,7 +98,7 @@ async function prerender({ api }: { api: string }) {
   }
 
   console.log(`Rendering 404 page`);
-  const bootstrap = { content: 'not found 🔍' };
+  const bootstrap = { content: "not found 🔍" };
   write("/", render(bootstrap), "404.html");
 
   const timeTaken = new Date().getTime() - startTime;

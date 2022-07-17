@@ -1,6 +1,6 @@
 import { createApp } from "app/create";
 import * as React from "react";
-import * as ReactDom from "react-dom";
+import { createRoot } from "react-dom/client";
 import "./styles.css";
 
 class AppLoader extends React.Component<
@@ -31,4 +31,4 @@ class AppLoader extends React.Component<
   }
 }
 
-ReactDom.render(<AppLoader />, document.getElementById("root"));
+createRoot(document.getElementById("root")!).render(<AppLoader />);
