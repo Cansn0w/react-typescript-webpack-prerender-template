@@ -22,7 +22,7 @@ function getBuildConfig(target) {
   }
 }
 
-function serve(port, entry, api) {
+function serve(port, entry, api, bind) {
   const buildOptions = {
     dirname: __dirname,
     mode: "development",
@@ -38,11 +38,7 @@ function serve(port, entry, api) {
           },
         }
       : {
-          setupMiddlewares: (middlewares, devServer) => {
-            if (!devServer) {
-              throw new Error("webpack-dev-server is not defined");
-            }
-
+          setupMiddlewares: (middlewares) => {
             middlewares.unshift(
               {
                 name: "/api",
@@ -65,10 +61,17 @@ function serve(port, entry, api) {
             return middlewares;
           },
         };
+  /**
+   * @type {WebpackDevServer.Configuration}
+   */
   const devServerConfig = {
     hot: true,
     historyApiFallback: true,
+    host: bind ? "0.0.0.0" : "127.0.0.1",
     port,
+    devMiddleware: {
+      stats: "minimal",
+    },
     ...apiConfig,
   };
 
@@ -138,6 +141,12 @@ require("yargs")
         .option("api", {
           describe: "address of the api endpoint to proxy through",
         })
+        .option("bind", {
+          alias: "b",
+          type: "boolean",
+          default: false,
+          describe: "open the devserver to the local area network",
+        })
         .version(false)
         .check(({ port }) => {
           if (isNaN(Number(port))) {
@@ -148,8 +157,8 @@ require("yargs")
           return true;
         });
     },
-    function ({ port, entry, api }) {
-      serve(port, entry, api);
+    function ({ port, entry, api, bind }) {
+      serve(port, entry, api, bind);
     }
   )
   .command(
