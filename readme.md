@@ -26,5 +26,4 @@ Change `prerender.ts` so the prerenderer is able to discover all routes you inte
 
 - No transpiler is currently configured, ideally we'd like to add closure compiler into the pipeline.
 - Webpack uses Terser as the minimizer by default.
-- No linter is currently configured.
 - No integration test runner is currently configured.

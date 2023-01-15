@@ -30,11 +30,11 @@ async function parseArgs() {
 
 async function copyDirSync(src: string, dest: string) {
   mkdirSync(dest, { recursive: true });
-  let entries = readdirSync(src, { withFileTypes: true });
+  const entries = readdirSync(src, { withFileTypes: true });
 
-  for (let entry of entries) {
-    let srcPath = join(src, entry.name);
-    let destPath = join(dest, entry.name);
+  for (const entry of entries) {
+    const srcPath = join(src, entry.name);
+    const destPath = join(dest, entry.name);
 
     if (entry.isDirectory()) {
       copyDirSync(srcPath, destPath);
