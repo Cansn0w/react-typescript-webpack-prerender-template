@@ -1,8 +1,5 @@
 import webpack from "webpack";
-import {
-  getReadableCSSModuleLocalIdent,
-  getMinimalCSSModuleLocalIdent,
-} from "./css-module-identifiers";
+import { CssModuleClassNameMinifierPlugin } from "./css-module-classname-minifier";
 import { resolve } from "path";
 import postcssNormalize from "postcss-normalize";
 import MiniCssExtractPlugin from "mini-css-extract-plugin";
@@ -52,9 +49,7 @@ function createBaseConfig({
                 importLoaders: 1,
                 sourceMap: devMode,
                 modules: {
-                  getLocalIdent: devMode
-                    ? getReadableCSSModuleLocalIdent
-                    : getMinimalCSSModuleLocalIdent,
+                  getLocalIdent: CssModuleClassNameMinifierPlugin.getLocalIdent,
                 },
               },
             },
@@ -110,6 +105,7 @@ function createBaseConfig({
       new MiniCssExtractPlugin({
         filename: "styles.[contenthash].css",
       }),
+      new CssModuleClassNameMinifierPlugin(),
     ],
     optimization: {
       minimizer: devMode ? [] : [`...` as const, new CssMinimizerPlugin()],
