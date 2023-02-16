@@ -1,25 +1,28 @@
-const webpack = require("webpack");
-const {
+import webpack from "webpack";
+import {
   getReadableCSSModuleLocalIdent,
   getMinimalCSSModuleLocalIdent,
-} = require("./css-module-identifiers");
-const { resolve } = require("path");
-const postcssNormalize = require("postcss-normalize");
-const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
-const HtmlWebpackPlugin = require("html-webpack-plugin");
-const { CleanWebpackPlugin } = require("clean-webpack-plugin");
-const { merge } = require("webpack-merge");
-const { BundleAnalyzerPlugin } = require("webpack-bundle-analyzer");
+} from "./css-module-identifiers";
+import { resolve } from "path";
+import postcssNormalize from "postcss-normalize";
+import MiniCssExtractPlugin from "mini-css-extract-plugin";
+import CssMinimizerPlugin from "css-minimizer-webpack-plugin";
+import HtmlWebpackPlugin from "html-webpack-plugin";
+import { CleanWebpackPlugin } from "clean-webpack-plugin";
+import { merge } from "webpack-merge";
+import { BundleAnalyzerPlugin } from "webpack-bundle-analyzer";
 
-/**
- * @param {{
- *   mode: string,
- *   dirname: string,
- *   devServer: boolean,
- * }} options
- */
-function createBaseConfig({ mode, dirname, devServer }) {
+type BuildConfiguration = {
+  mode: "production" | "development" | undefined;
+  dirname: string;
+  devServer: boolean;
+};
+
+function createBaseConfig({
+  mode,
+  dirname,
+  devServer,
+}: BuildConfiguration): webpack.Configuration {
   const devMode = mode !== "production";
   return {
     bail: true,
@@ -105,24 +108,19 @@ function createBaseConfig({ mode, dirname, devServer }) {
           ]
         : []),
       new MiniCssExtractPlugin({
-        filename: "styles.css",
+        filename: "styles.[contenthash].css",
       }),
     ],
     optimization: {
-      minimizer: devMode ? [] : [`...`, new CssMinimizerPlugin()],
+      minimizer: devMode ? [] : [`...` as const, new CssMinimizerPlugin()],
     },
-    stats: "minimal",
+    stats: "minimal" as const,
   };
 }
 
-/**
- * @param {{
- *   mode: string,
- *   dirname: string,
- *   devServer: boolean,
- * }} options
- */
-function createAppConfig(options) {
+export function createAppConfig(
+  options: BuildConfiguration
+): webpack.Configuration {
   const { mode, dirname, devServer } = options;
   const devMode = mode !== "production";
   return merge(createBaseConfig(options), {
@@ -131,6 +129,7 @@ function createAppConfig(options) {
     output: {
       filename: "[name].[contenthash].js",
       path: resolve(dirname, "dist/html"),
+      clean: true,
     },
     plugins: [
       ...(devServer ? [] : [new CleanWebpackPlugin()]),
@@ -162,14 +161,9 @@ function createAppConfig(options) {
   });
 }
 
-/**
- * @param {{
- *   mode: string,
- *   dirname: string,
- *   devServer: boolean,
- * }} options
- */
-function createPrerenderConfig(options) {
+export function createPrerenderConfig(
+  options: BuildConfiguration
+): webpack.Configuration {
   const { dirname } = options;
 
   return merge(createBaseConfig(options), {
@@ -183,19 +177,6 @@ function createPrerenderConfig(options) {
   });
 }
 
-/**
- * @param {{
- *   mode: string,
- *   dirname: string,
- *   devServer: boolean,
- * }} options
- */
-function createAllConfig(options) {
+export function createAllConfig(options: BuildConfiguration) {
   return [createAppConfig(options), createPrerenderConfig(options)];
 }
-
-module.exports = {
-  createAppConfig,
-  createPrerenderConfig,
-  createAllConfig,
-};

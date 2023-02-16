@@ -1,4 +1,4 @@
-const loaderUtils = require("loader-utils");
+import loaderUtils from "loader-utils";
 
 class ClassnameGenerator {
   state = [0, 0];
@@ -19,11 +19,11 @@ class ClassnameGenerator {
   }
 }
 
-function getReadableCSSModuleLocalIdent(
-  context,
-  localIdentName,
-  localName,
-  options
+export function getReadableCSSModuleLocalIdent(
+  context: unknown,
+  localIdentName: unknown,
+  localName: string,
+  options: unknown
 ) {
   return loaderUtils
     .interpolateName(context, "[path][name]__" + localName, options)
@@ -32,11 +32,11 @@ function getReadableCSSModuleLocalIdent(
 
 const nameGenerator = new ClassnameGenerator();
 const nameMap = new Map();
-function getMinimalCSSModuleLocalIdent(
-  context,
-  localIdentName,
-  localName,
-  options
+export function getMinimalCSSModuleLocalIdent(
+  context: unknown,
+  localIdentName: unknown,
+  localName: string,
+  options: unknown
 ) {
   const codeName = loaderUtils.interpolateName(
     context,
@@ -48,8 +48,3 @@ function getMinimalCSSModuleLocalIdent(
   }
   return nameMap.get(codeName);
 }
-
-module.exports = {
-  getReadableCSSModuleLocalIdent,
-  getMinimalCSSModuleLocalIdent,
-};

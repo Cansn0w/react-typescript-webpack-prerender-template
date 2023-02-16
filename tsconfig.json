@@ -18,5 +18,11 @@
     "inlineSources": true,
     "module": "ESNext"
   },
-  "include": ["./declarations.d.ts", "./src/**/*"]
+  "include": ["./declarations.d.ts", "./src/**/*"],
+  "ts-node": {
+    "compilerOptions": {
+      "module": "CommonJS",
+      "esModuleInterop": true
+    }
+  }
 }
