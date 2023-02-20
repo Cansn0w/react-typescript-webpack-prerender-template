@@ -8,6 +8,7 @@ import {
   copyFileSync,
 } from "fs";
 import { dirname, join } from "path";
+import { Writable } from "stream";
 import * as ReactDOMServer from "react-dom/server";
 import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
@@ -44,6 +45,25 @@ async function copyDirSync(src: string, dest: string) {
   }
 }
 
+async function renderToString(content: React.ReactNode) {
+  const { pipe } = ReactDOMServer.renderToPipeableStream(content);
+  return new Promise<string>((res) => {
+    const chunks: Buffer[] = [];
+    pipe(
+      new Writable({
+        write(chunk, encoding, callback) {
+          chunks.push(chunk);
+          callback();
+        },
+        final(callback) {
+          res(Buffer.concat(chunks).toString());
+          callback();
+        },
+      })
+    );
+  });
+}
+
 // Update your prerender and path discovery logic accordingly
 async function prerender({ api }: { api: string }) {
   process.chdir(__dirname);
@@ -64,8 +84,8 @@ async function prerender({ api }: { api: string }) {
     return json;
   }
 
-  function render(bootstrap: { content: string }) {
-    const content = ReactDOMServer.renderToString(createApp(bootstrap));
+  async function render(bootstrap: { content: string }) {
+    const content = await renderToString(createApp(bootstrap));
     return htmlTemplate
       .replace('"$bootstrap"', JSON.stringify(bootstrap))
       .replace("$content", content)
@@ -94,12 +114,12 @@ async function prerender({ api }: { api: string }) {
     const route = routes[i];
     console.log(`Rendering ${route}`);
     const bootstrap = readAndExtractStaticAPI(["api"]);
-    write(route, render(bootstrap));
+    write(route, await render(bootstrap));
   }
 
   console.log(`Rendering 404 page`);
   const bootstrap = { content: "not found 🔍" };
-  write("/", render(bootstrap), "404.html");
+  write("/", await render(bootstrap), "404.html");
 
   const timeTaken = new Date().getTime() - startTime;
   console.log("--------------------------------");
