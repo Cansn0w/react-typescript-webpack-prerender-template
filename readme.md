@@ -8,6 +8,31 @@ This boilerplate is extremely minimal but gives you complete control over how yo
 
 You can follow scripts configured in `packages.json` to serve, test, build, and prerender.
 
+### Start the web app locally
+
+Run
+
+```sh
+npm start
+```
+
+Use the `--help` option to see more options. Note when passing options via npm to the underlying program, `--` is required before those options.
+
+```sh
+npm start -- --help
+```
+
+#### Proxying
+
+Two packages inside the `static/` directory will be served on `/data/` and `/media/` path respectively when the app is running locally.
+It will also be copied during the build process and become part of the final bundle.
+
+For convenience, when the `--api` option is provided, the given endpoint will be proxied on the `/api/` path and become accessible during local development. e.g.
+
+```sh
+npm start -- --api https://checkip.amazonaws.com/
+```
+
 ## Prerender support
 
 Scripts are included to render a static web app from optional static APIs.

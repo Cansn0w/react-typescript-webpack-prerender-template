@@ -1,19 +1,17 @@
 import { createApp } from "app/create";
 import * as React from "react";
 import { createRoot } from "react-dom/client";
+import { Bootstrap } from "types";
 import "./styles.css";
 
-class AppLoader extends React.Component<
-  object,
-  { bootstrap?: { content: string } }
-> {
+class AppLoader extends React.Component<object, { bootstrap?: Bootstrap }> {
   constructor(props: object) {
     super(props);
     this.state = { bootstrap: undefined };
   }
 
   componentDidMount() {
-    fetch("api")
+    fetch("data/")
       .then((res) => res.json())
       .then(({ content }) => {
         if (content) {

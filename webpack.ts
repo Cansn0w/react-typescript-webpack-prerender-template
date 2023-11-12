@@ -2,12 +2,15 @@
 
 import WebpackDevServer from "webpack-dev-server";
 import webpack from "webpack";
-import serveStatic from "serve-static";
 import {
   createAppConfig,
   createPrerenderConfig,
   createAllConfig,
 } from "./scripts/webpack.config";
+import {
+  createStaticMiddleware,
+  createLocalServices,
+} from "./scripts/dev-server-utils";
 import * as yargs from "yargs";
 
 function getBuildConfig(target: string) {
@@ -48,45 +51,21 @@ function serve(
     devServer: true,
   };
   const webpackConfig = getBuildConfig(entry)(buildOptions);
-  const apiConfig =
-    api != null
-      ? {
-          proxy: {
-            "/api": api,
-            "/media": api,
-          },
-        }
-      : {
-          setupMiddlewares: (middlewares: WebpackDevServer.Middleware[]) => {
-            const serveApi = serveStatic("mock/api", {
-              fallthrough: false,
-              index: "index.json",
-            });
-            const ApiMiddleware: WebpackDevServer.RequestHandler = (
-              ...args
-            ) => {
-              serveApi(...args);
-            };
-            const serveMedia = serveStatic("mock/media", {
-              fallthrough: false,
-              index: "index.json",
-            });
-            const MediaMiddleware: WebpackDevServer.RequestHandler = (
-              ...args
-            ) => {
-              serveMedia(...args);
-            };
-            middlewares.unshift({
-              path: "/api",
-              middleware: ApiMiddleware,
-            });
-            middlewares.unshift({
-              path: "/media",
-              middleware: MediaMiddleware,
-            });
-            return middlewares;
-          },
-        };
+
+  const setupMiddlewares = (middlewares: WebpackDevServer.Middleware[]) => {
+    middlewares.unshift(
+      createStaticMiddleware("/data", "static/data"),
+      createStaticMiddleware("/media", "static/media"),
+    );
+    if (api != null) {
+      middlewares.unshift({
+        path: "/api",
+        middleware: createLocalServices(api),
+      });
+    }
+    return middlewares;
+  };
+
   /**
    * @type {WebpackDevServer.Configuration}
    */
@@ -98,7 +77,7 @@ function serve(
     devMiddleware: {
       stats: "minimal" as const,
     },
-    ...apiConfig,
+    setupMiddlewares,
   };
 
   const server = new WebpackDevServer(

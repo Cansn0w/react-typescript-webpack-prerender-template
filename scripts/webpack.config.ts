@@ -130,7 +130,7 @@ export function createAppConfig(
     plugins: [
       ...(devServer ? [] : [new CleanWebpackPlugin()]),
       new MiniCssExtractPlugin({
-        filename: "styles.css",
+        filename: "styles.[contenthash].css",
       }),
       new HtmlWebpackPlugin({
         template: devServer ? "index.html" : "index.server.html",
