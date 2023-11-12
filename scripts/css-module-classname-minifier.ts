@@ -58,10 +58,10 @@ class ClassnameStore {
               this.loaded.add(name);
             } else {
               console.warn(
-                `Found duplicated class names from {this.storeFileName}, please regenerate by removing ${storeFileName}.`
+                `Found duplicated class names from {this.storeFileName}, please regenerate by removing ${storeFileName}.`,
               );
             }
-          }
+          },
         );
       } else {
         this.generating = true;
@@ -83,7 +83,7 @@ class ClassnameStore {
     this.sessions -= 1;
     if (this.sessions === 0) {
       const deleted = Array.from(this.loaded).filter(
-        (name) => !this.visited.has(name)
+        (name) => !this.visited.has(name),
       );
       if (this.generating) {
         console.log(`saving all class name into ${storeFileName}.`);
@@ -92,7 +92,7 @@ class ClassnameStore {
           "\x1b[1m",
           "\x1b[33m",
           `${deleted.length} class names including "${deleted[0]}" have been removed from the list, you can regenerate the list by removing ${storeFileName}.`,
-          "\x1b[0m"
+          "\x1b[0m",
         );
       }
       fs.writeFileSync(storeFileName, JSON.stringify(this.classnames, null, 2));
@@ -106,7 +106,7 @@ function getReadableCSSModuleLocalIdent(
   context: unknown,
   localIdentName: unknown,
   localName: string,
-  options: unknown
+  options: unknown,
 ) {
   return loaderUtils
     .interpolateName(context, "[path][name]__" + localName, options)
@@ -117,17 +117,17 @@ function getMinimalCSSModuleLocalIdent(
   context: unknown,
   localIdentName: unknown,
   localName: string,
-  options: unknown
+  options: unknown,
 ) {
   if (store == null) {
     throw new Error(
-      `CssModuleClassNameMinifierPlugin is not initialized, make sure to include the plugin in your webpack configuration.`
+      `CssModuleClassNameMinifierPlugin is not initialized, make sure to include the plugin in your webpack configuration.`,
     );
   }
   const codeName = loaderUtils.interpolateName(
     context,
     "[path][name]__" + localName,
-    options
+    options,
   );
   return store.getName(codeName);
 }
@@ -165,7 +165,7 @@ export class CssModuleClassNameMinifierPlugin {
     context: unknown,
     localIdentName: unknown,
     localName: string,
-    options: unknown
+    options: unknown,
   ) {
     return getLocalIdent(context, localIdentName, localName, options);
   }

@@ -98,7 +98,7 @@ function createBaseConfig({
         ? [
             new webpack.NormalModuleReplacementPlugin(
               /configurations\/configuration\.ts/gi,
-              "./configuration.dev.ts"
+              "./configuration.dev.ts",
             ),
           ]
         : []),
@@ -115,7 +115,7 @@ function createBaseConfig({
 }
 
 export function createAppConfig(
-  options: BuildConfiguration
+  options: BuildConfiguration,
 ): webpack.Configuration {
   const { mode, dirname, devServer } = options;
   const devMode = mode !== "production";
@@ -158,7 +158,7 @@ export function createAppConfig(
 }
 
 export function createPrerenderConfig(
-  options: BuildConfiguration
+  options: BuildConfiguration,
 ): webpack.Configuration {
   const { dirname } = options;
 

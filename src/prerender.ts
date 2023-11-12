@@ -59,7 +59,7 @@ async function renderToString(content: React.ReactNode) {
           res(Buffer.concat(chunks).toString());
           callback();
         },
-      })
+      }),
     );
   });
 }

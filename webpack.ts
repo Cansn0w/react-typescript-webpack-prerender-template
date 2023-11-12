@@ -27,8 +27,8 @@ function runWebpack(
   config: webpack.Configuration | webpack.Configuration[],
   callback?: (
     error: Error | undefined,
-    stats: webpack.Stats | webpack.MultiStats | undefined
-  ) => void
+    stats: webpack.Stats | webpack.MultiStats | undefined,
+  ) => void,
 ) {
   if (Array.isArray(config)) {
     return webpack(config, callback);
@@ -40,7 +40,7 @@ function serve(
   port: number,
   entry: string,
   api: string | undefined,
-  bind: boolean
+  bind: boolean,
 ) {
   const buildOptions = {
     dirname: __dirname,
@@ -103,7 +103,7 @@ function serve(
 
   const server = new WebpackDevServer(
     devServerConfig,
-    runWebpack(webpackConfig)
+    runWebpack(webpackConfig),
   );
   server.startCallback(() => {
     console.log(`Starting server on http://localhost:${port}`);
@@ -140,7 +140,7 @@ function build(mode: "development" | "production", entry: string) {
           chunks: false,
           chunkModules: false,
           assets: false,
-        }) + "\n"
+        }) + "\n",
       );
     }
   });
@@ -179,7 +179,7 @@ yargs
         .check(({ port }) => {
           if (isNaN(Number(port))) {
             throw Error(
-              `Error: port number needs to be a number, received "${port}"`
+              `Error: port number needs to be a number, received "${port}"`,
             );
           }
           return true;
@@ -187,7 +187,7 @@ yargs
     },
     function ({ port, entry, api, bind }) {
       serve(port, entry, api, bind);
-    }
+    },
   )
   .command(
     "build [mode] [entry]",
@@ -220,7 +220,7 @@ yargs
     },
     function ({ mode, entry }) {
       build(mode, entry);
-    }
+    },
   )
   .demandCommand(1, "")
   .help().argv;

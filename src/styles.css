@@ -9,8 +9,15 @@ body {
 html {
   color: rgba(0, 0, 0, 0.8);
   font-size: calc(0.5vw + 12.2px);
-  font-family: OpenSans, Roboto, Helvetica Neue Light, Helvetica Neue, Helvetica,
-    Arial, Lucida Grande, sans-serif;
+  font-family:
+    OpenSans,
+    Roboto,
+    Helvetica Neue Light,
+    Helvetica Neue,
+    Helvetica,
+    Arial,
+    Lucida Grande,
+    sans-serif;
   overflow-y: scroll;
 }
 
