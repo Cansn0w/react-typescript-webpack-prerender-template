@@ -33,6 +33,10 @@ For convenience, when the `--api` option is provided, the given endpoint will be
 npm start -- --api https://checkip.amazonaws.com/
 ```
 
+## Dependencies
+
+Require node 18, run `npm i` from repository root to install other dependencies.
+
 ## Prerender support
 
 Scripts are included to render a static web app from optional static APIs.
