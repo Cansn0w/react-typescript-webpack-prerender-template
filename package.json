@@ -4,7 +4,7 @@
   "description": "A minimal React project template built by webpack with typescript and css modules support, also includes a prerender facility.",
   "scripts": {
     "test": "jest",
-    "clean": "rm -rf dist/*",
+    "clean": "ts-node scripts/clean.ts",
     "start": "ts-node webpack.ts serve",
     "build": "ts-node webpack.ts build && npm run prerender --",
     "build:dev": "ts-node webpack.ts build --mode=development && npm run prerender -- --api mock",
