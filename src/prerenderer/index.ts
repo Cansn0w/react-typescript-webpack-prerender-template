@@ -3,6 +3,7 @@ import { promises as fs } from "fs";
 import { join, dirname } from "path";
 import { Prerenderer } from "./prerenderer";
 import { renderToString } from "./render";
+import { Bootstrap, RenderMode } from "types";
 
 /**
  * Function that renders a list of routes into html files
@@ -18,13 +19,17 @@ export async function prerender(routes: string[]) {
    * Modify this function to support more capabilities such as prefetch data or adding react router.
    */
   async function renderToHtml(route: string): Promise<string> {
-    const bootstrap = await fs.readFile(
+    const appData = await fs.readFile(
       join(htmlRoot, "data", route, "index.json"),
       "utf8",
     );
-    const content = await renderToString(createApp(JSON.parse(bootstrap)));
+    const bootstrap: Bootstrap = {
+      data: JSON.parse(appData),
+      mode: RenderMode.SERVER,
+    };
+    const content = await renderToString(createApp(bootstrap.data));
     return htmlTemplate
-      .replace('"$bootstrap"', bootstrap)
+      .replace('"$bootstrap"', JSON.stringify(bootstrap))
       .replace(`<div id="root"></div>`, `<div id="root">${content}</div>`)
       .replace("$title", "Page");
   }

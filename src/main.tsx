@@ -1,7 +1,7 @@
 import { createApp } from "app/create";
 import * as React from "react";
 import { createRoot } from "react-dom/client";
-import { Bootstrap } from "types";
+import { Bootstrap, RenderMode } from "types";
 import "./styles.css";
 
 class AppLoader extends React.Component<object, { bootstrap?: Bootstrap }> {
@@ -15,14 +15,16 @@ class AppLoader extends React.Component<object, { bootstrap?: Bootstrap }> {
       .then((res) => res.json())
       .then(({ content }) => {
         if (content) {
-          this.setState({ bootstrap: { content: content } });
+          this.setState({
+            bootstrap: { mode: RenderMode.CLIENT, data: { content } },
+          });
         }
       });
   }
 
   render() {
-    if (this.state.bootstrap) {
-      return createApp(this.state.bootstrap);
+    if (this.state.bootstrap != null) {
+      return createApp(this.state.bootstrap.data);
     } else {
       return <div>Loading...</div>;
     }

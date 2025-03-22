@@ -1,8 +1,20 @@
+declare global {
+  interface Window {
+    bootstrap: Bootstrap | undefined;
+  }
+}
+
+export enum RenderMode {
+  CLIENT = "c",
+  SERVER = "s",
+}
+
+export type AppData = { content: string };
+
 /**
- * Data object used to create the app, remove if not used.
- *
- * Can be saved to html during prerendering and accessed synchronously during initial render.
+ * Data object to share state between server side and client side
  */
 export type Bootstrap = {
-  content: string;
+  data: AppData;
+  mode: RenderMode;
 };
